@@ -1,4 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="128dp"
+    android:height="128dp"
+    android:viewportWidth="128"
+    android:viewportHeight="128">
 
-</selector>
+    <!-- Nền hình chữ nhật bo góc -->
+    <path
+        android:fillColor="#2196F3"
+        android:pathData="M16,24
+                          h96
+                          a8,8 0 0 1 8,8
+                          v72
+                          a8,8 0 0 1 -8,8
+                          h-96
+                          a8,8 0 0 1 -8,-8
+                          v-72
+                          a8,8 0 0 1 8,-8z" />
+
+    <!-- Đường viền trắng -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4"
+        android:pathData="M16,24
+                          h96
+                          a8,8 0 0 1 8,8
+                          v72
+                          a8,8 0 0 1 -8,8
+                          h-96
+                          a8,8 0 0 1 -8,-8
+                          v-72
+                          a8,8 0 0 1 8,-8z" />
+
+    <!-- Chữ A (giả lập bằng path) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M64,40
+                          l-16,48
+                          h8
+                          l4,-12
+                          h24
+                          l4,12
+                          h8
+                          l-16,-48
+                          z
+                          M64,52
+                          l8,24
+                          h-16
+                          l8,-24z"/>
+</vector>
