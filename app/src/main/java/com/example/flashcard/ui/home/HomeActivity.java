@@ -1,8 +1,12 @@
 package com.example.flashcard.ui.home;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,5 +49,32 @@ public class HomeActivity extends AppCompatActivity {
 
         adapter = new DeckListAdapter(this, deckList);
         recyclerViewDecks.setAdapter(adapter);
+
+        fabAddDeck.setOnClickListener(v -> {
+            Deck newDeck = new Deck(deckList.size() + 1,
+                    "Bộ thẻ mới " + (deckList.size() + 1),
+                    "Mô tả ngắn",
+                    0);
+            deckList.add(newDeck);
+            adapter.notifyItemInserted(deckList.size() - 1);
+        });
+
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            Toast.makeText(this, "Mở Settings", Toast.LENGTH_SHORT).show();
+            // TODO: mở SettingsActivity ở bước sau
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
