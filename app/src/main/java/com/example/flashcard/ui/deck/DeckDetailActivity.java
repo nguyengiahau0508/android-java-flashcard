@@ -2,7 +2,6 @@ package com.example.flashcard.ui.deck;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -21,16 +20,13 @@ import java.util.List;
 
 public class DeckDetailActivity extends AppCompatActivity {
 
-    // --- UI Components ---
     private RecyclerView recyclerViewCards;
     private FloatingActionButton fabAddCard;
     private MaterialToolbar toolbar;
 
-    // --- Adapter & Data ---
     private CardListAdapter adapter;
     private final List<Card> cardList = new ArrayList<>();
 
-    // --- Activity Result Launchers ---
     private ActivityResultLauncher<Intent> addCardLauncher;
     private ActivityResultLauncher<Intent> editCardLauncher;
 
@@ -47,8 +43,6 @@ public class DeckDetailActivity extends AppCompatActivity {
         setupListeners();
     }
 
-    // --- Initialization ---
-
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
         recyclerViewCards = findViewById(R.id.recyclerViewCards);
@@ -58,7 +52,6 @@ public class DeckDetailActivity extends AppCompatActivity {
     private void setupToolbar() {
         setSupportActionBar(toolbar);
 
-        // Set title from Intent data
         Intent intent = getIntent();
         String deckName = intent.getStringExtra("deck_name");
         setTitle(deckName != null ? deckName : "Deck Detail");
@@ -66,28 +59,29 @@ public class DeckDetailActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         recyclerViewCards.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CardListAdapter(this, cardList);
+        adapter = new CardListAdapter(cardList, (card, position) -> {
+            // mở Edit
+            Intent intent = new Intent(this, AddEditCardActivity.class);
+            intent.putExtra("mode", "edit");
+            intent.putExtra("card", card);
+            intent.putExtra("position", position);
+            editCardLauncher.launch(intent);
+        });
         recyclerViewCards.setAdapter(adapter);
     }
 
     private void loadDummyCards() {
-        // TODO: Replace this with actual data loading from DB/Repository
         cardList.add(new Card(1, 1, "Dog", "Con chó", null));
         cardList.add(new Card(2, 1, "Cat", "Con mèo", null));
         cardList.add(new Card(3, 1, "Elephant", "Con voi", null));
     }
 
-    // --- Listeners & Launchers ---
-
     private void setupListeners() {
-        fabAddCard.setOnClickListener(v -> navigateToAddCard());
-    }
-
-    private void navigateToAddCard() {
-        Toast.makeText(this, "Add new Card", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, AddEditCardActivity.class);
-        intent.putExtra("mode", "add");
-        addCardLauncher.launch(intent);
+        fabAddCard.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AddEditCardActivity.class);
+            intent.putExtra("mode", "add");
+            addCardLauncher.launch(intent);
+        });
     }
 
     private void registerActivityLaunchers() {
@@ -97,17 +91,25 @@ public class DeckDetailActivity extends AppCompatActivity {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         Card newCard = (Card) result.getData().getSerializableExtra("card");
                         if (newCard != null) {
-                            addNewCard(newCard);
+                            cardList.add(newCard);
+                            adapter.notifyItemInserted(cardList.size() - 1);
                         }
                     }
                 }
         );
 
-        // TODO: implement editCardLauncher if editing is required
-    }
-
-    private void addNewCard(Card newCard) {
-        cardList.add(newCard);
-        adapter.notifyItemInserted(cardList.size() - 1);
+        editCardLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Card updatedCard = (Card) result.getData().getSerializableExtra("card");
+                        int pos = result.getData().getIntExtra("position", -1);
+                        if (updatedCard != null && pos >= 0) {
+                            cardList.set(pos, updatedCard);
+                            adapter.notifyItemChanged(pos);
+                        }
+                    }
+                }
+        );
     }
 }

@@ -40,10 +40,11 @@ public class AddEditDeckActivity extends AppCompatActivity {
     private void loadDeckIfEditMode() {
         String mode = getIntent().getStringExtra("mode");
         if ("edit".equals(mode)) {
-            String deckName = getIntent().getStringExtra("deck_name");
-            String deckDescription = getIntent().getStringExtra("deck_description");
-            etDeckName.setText(deckName);
-            etDeckDescription.setText(deckDescription);
+            Deck deck = (Deck) getIntent().getSerializableExtra("deck");
+            if (deck != null) {
+                etDeckName.setText(deck.getName());
+                etDeckDescription.setText(deck.getDescription());
+            }
         }
     }
 
@@ -61,12 +62,16 @@ public class AddEditDeckActivity extends AppCompatActivity {
             return;
         }
 
-        // Create new Deck object (id is temporary = 0)
         Deck newDeck = new Deck(0, name, description, 0);
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra("deck", newDeck);
+
+        int position = getIntent().getIntExtra("position", -1);
+        resultIntent.putExtra("position", position);
+
         setResult(RESULT_OK, resultIntent);
         finish();
     }
+
 }

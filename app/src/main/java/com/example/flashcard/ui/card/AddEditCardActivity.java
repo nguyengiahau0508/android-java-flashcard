@@ -96,23 +96,20 @@ public class AddEditCardActivity extends AppCompatActivity {
         String front = etFrontText.getText().toString().trim();
         String back = etBackText.getText().toString().trim();
 
-        if (!validateInput(front, back)) return;
-
-        Card resultCard;
-        if ("edit".equals(mode) && editingCard != null) {
-            resultCard = new Card(
-                    editingCard.getId(),
-                    editingCard.getDeckId(),
-                    front,
-                    back,
-                    imagePath
-            );
-        } else {
-            resultCard = new Card(0, 0, front, back, imagePath); // new card
+        if (front.isEmpty() || back.isEmpty()) {
+            etFrontText.setError("Required");
+            etBackText.setError("Required");
+            return;
         }
 
+        Card newCard = new Card(0, 0, front, back, imagePath);
+
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("card", resultCard);
+        resultIntent.putExtra("card", newCard);
+
+        int position = getIntent().getIntExtra("position", -1);
+        resultIntent.putExtra("position", position);
+
         setResult(RESULT_OK, resultIntent);
         finish();
     }

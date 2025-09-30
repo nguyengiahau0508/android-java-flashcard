@@ -9,4 +9,6 @@
     <string name="front_text">Front text</string>
     <string name="back_text">Back text</string>
     <string name="choose_image">Choose Image</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

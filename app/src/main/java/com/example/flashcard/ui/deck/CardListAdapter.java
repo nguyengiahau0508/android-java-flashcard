@@ -1,7 +1,5 @@
 package com.example.flashcard.ui.deck;
 
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,24 +12,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.flashcard.R;
 import com.example.flashcard.data.model.Card;
-import com.example.flashcard.ui.card.AddEditCardActivity;
 
 import java.util.List;
 
 public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardViewHolder> {
 
-    private final Context context;
-    private final List<Card> cardList;
+    public interface OnCardClickListener {
+        void onCardClick(Card card, int position);
+    }
 
-    public CardListAdapter(Context context, List<Card> cardList) {
-        this.context = context;
+    private final List<Card> cardList;
+    private final OnCardClickListener listener;
+
+    public CardListAdapter(List<Card> cardList, OnCardClickListener listener) {
         this.cardList = cardList;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_card, parent, false);
         return new CardViewHolder(view);
     }
 
@@ -39,11 +41,9 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardVi
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         Card card = cardList.get(position);
 
-        // Bind card data
         holder.tvFront.setText(card.getFrontText());
         holder.tvBack.setText(card.getBackText());
 
-        // Show image if available
         if (card.getImagePath() != null && !card.getImagePath().isEmpty()) {
             holder.ivCardImage.setVisibility(View.VISIBLE);
             holder.ivCardImage.setImageURI(Uri.parse(card.getImagePath()));
@@ -51,23 +51,17 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardVi
             holder.ivCardImage.setVisibility(View.GONE);
         }
 
-        // Handle card click → open in edit mode
-        holder.itemView.setOnClickListener(v -> openEditCard(card));
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onCardClick(card, position);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return cardList.size();
     }
-
-    private void openEditCard(Card card) {
-        Intent intent = new Intent(context, AddEditCardActivity.class);
-        intent.putExtra("mode", "edit");
-        intent.putExtra("card", card);
-        context.startActivity(intent);
-    }
-
-    // --- ViewHolder ---
 
     static class CardViewHolder extends RecyclerView.ViewHolder {
         final TextView tvFront, tvBack;

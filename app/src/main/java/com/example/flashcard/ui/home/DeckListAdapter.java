@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,10 +21,16 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckVi
 
     private final Context context;
     private final List<Deck> deckList;
+    private final OnDeckEditListener editListener;
 
-    public DeckListAdapter(Context context, List<Deck> deckList) {
+    public interface OnDeckEditListener {
+        void onEditDeck(Deck deck, int position);
+    }
+
+    public DeckListAdapter(Context context, List<Deck> deckList, OnDeckEditListener editListener) {
         this.context = context;
         this.deckList = deckList;
+        this.editListener = editListener;
     }
 
     @NonNull
@@ -37,12 +44,24 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckVi
     public void onBindViewHolder(@NonNull DeckViewHolder holder, int position) {
         Deck deck = deckList.get(position);
 
-        // Bind deck data to views
+        // Bind data
         holder.tvDeckName.setText(deck.getName());
         holder.tvDeckCount.setText(deck.getCardCount() + " cards");
 
-        // Set item click listener
+        // Open detail when click on item
         holder.itemView.setOnClickListener(v -> openDeckDetail(deck));
+
+        // Edit button
+        holder.btnEditDeck.setOnClickListener(v -> {
+            if (editListener != null) {
+                editListener.onEditDeck(deck, position);
+            }
+        });
+
+        // Delete button (not handled yet)
+        holder.btnDeleteDeck.setOnClickListener(v -> {
+            // TODO: Implement delete deck later
+        });
     }
 
     @Override
@@ -50,9 +69,6 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckVi
         return deckList.size();
     }
 
-    /**
-     * Opens DeckDetailActivity for the selected deck.
-     */
     private void openDeckDetail(Deck deck) {
         Intent intent = new Intent(context, DeckDetailActivity.class);
         intent.putExtra("deck_id", deck.getId());
@@ -61,15 +77,17 @@ public class DeckListAdapter extends RecyclerView.Adapter<DeckListAdapter.DeckVi
     }
 
     // --- ViewHolder ---
-
     static class DeckViewHolder extends RecyclerView.ViewHolder {
         final TextView tvDeckName;
         final TextView tvDeckCount;
+        final ImageButton btnEditDeck, btnDeleteDeck;
 
         public DeckViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDeckName = itemView.findViewById(R.id.tvDeckName);
             tvDeckCount = itemView.findViewById(R.id.tvDeckCount);
+            btnEditDeck = itemView.findViewById(R.id.btnEditDeck);
+            btnDeleteDeck = itemView.findViewById(R.id.btnDeleteDeck);
         }
     }
 }

@@ -37,6 +37,7 @@ public class HomeActivity extends AppCompatActivity {
 
     // --- Activity Result ---
     private ActivityResultLauncher<Intent> addDeckResultLauncher;
+    private ActivityResultLauncher<Intent> editDeckResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
      */
     private void setupRecyclerView() {
         recyclerViewDecks.setLayoutManager(new LinearLayoutManager(this));
-        deckAdapter = new DeckListAdapter(this, deckList);
+        deckAdapter = new DeckListAdapter(this, deckList, (deck, pos) -> openEditDeck(deck, pos));
         recyclerViewDecks.setAdapter(deckAdapter);
     }
 
@@ -125,6 +126,21 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        // Edit Deck launcher
+        editDeckResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Deck updatedDeck = (Deck) result.getData().getSerializableExtra("deck");
+                        int pos = result.getData().getIntExtra("position", -1);
+                        if (updatedDeck != null && pos >= 0) {
+                            deckList.set(pos, updatedDeck);
+                            deckAdapter.notifyItemChanged(pos);
+                        }
+                    }
+                }
+        );
     }
 
     /**
@@ -134,6 +150,14 @@ public class HomeActivity extends AppCompatActivity {
         deckList.add(newDeck);
         deckAdapter.notifyItemInserted(deckList.size() - 1);
         Toast.makeText(this, "Deck added: " + newDeck.getName(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void openEditDeck(Deck deck, int position) {
+        Intent intent = new Intent(this, AddEditDeckActivity.class);
+        intent.putExtra("mode", "edit");
+        intent.putExtra("deck", deck);
+        intent.putExtra("position", position);
+        editDeckResultLauncher .launch(intent);
     }
 
     // --- Menu Handling ---

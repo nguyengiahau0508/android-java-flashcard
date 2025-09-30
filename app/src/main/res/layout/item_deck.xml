@@ -9,24 +9,53 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tvDeckName"
-            android:layout_width="wrap_content"
+        <!-- Text info -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Deck Name"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvDeckCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="10 cards"
-            android:textSize="14sp"
-            android:textColor="@color/gray" />
+            <TextView
+                android:id="@+id/tvDeckName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Deck Name"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDeckCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10 cards"
+                android:textSize="14sp"
+                android:textColor="@color/gray" />
+
+        </LinearLayout>
+
+        <!-- Action buttons -->
+        <ImageButton
+            android:id="@+id/btnEditDeck"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/edit"
+            android:src="@drawable/ic_edit"
+            app:tint="@color/black" />
+
+        <ImageButton
+            android:id="@+id/btnDeleteDeck"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/delete"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/black" />
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
