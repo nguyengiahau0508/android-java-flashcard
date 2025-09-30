@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="etDeckName" type="id" />
+    <item name="etDeckDescription" type="id" />
+    <item name="btnSaveDeck" type="id" />
+    <item name="btnCancelDeck" type="id" />
+</resources>

@@ -21,6 +21,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.home.HomeActivity"/>
+        <activity android:name=".ui.deck.DeckDetailActivity"/>
+        <activity android:name=".ui.deck.AddEditDeckActivity"/>
+        <activity android:name=".ui.card.AddEditCardActivity"/>
     </application>
 
 </manifest>

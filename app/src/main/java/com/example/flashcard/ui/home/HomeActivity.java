@@ -1,11 +1,14 @@
 package com.example.flashcard.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,20 +16,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.flashcard.R;
 import com.example.flashcard.data.model.Deck;
+import com.example.flashcard.ui.deck.AddEditDeckActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
+    // --- UI Components ---
     private RecyclerView recyclerViewDecks;
     private FloatingActionButton fabAddDeck;
     private MaterialToolbar toolbar;
 
-    private DeckListAdapter adapter;
-    private List<Deck> deckList;
+    // --- Adapter & Data ---
+    private DeckListAdapter deckAdapter;
+    private final List<Deck> deckList = new ArrayList<>();
+
+    // --- Activity Result ---
+    private ActivityResultLauncher<Intent> addDeckResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,32 +44,99 @@ public class HomeActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        recyclerViewDecks = findViewById(R.id.recyclerViewDecks);
-        recyclerViewDecks.setLayoutManager(new LinearLayoutManager(this));
-
-        fabAddDeck = findViewById(R.id.fabAddDeck);
-
-        deckList = new ArrayList<>();
-        deckList.add(new Deck(1, "Động vật", "Các loài động vật quen thuộc", 10));
-        deckList.add(new Deck(2, "Màu sắc", "Tên các màu cơ bản", 8));
-        deckList.add(new Deck(3, "IT Terms", "Thuật ngữ công nghệ thông tin", 12));
-
-        adapter = new DeckListAdapter(this, deckList);
-        recyclerViewDecks.setAdapter(adapter);
-
-        fabAddDeck.setOnClickListener(v -> {
-            Deck newDeck = new Deck(deckList.size() + 1,
-                    "Bộ thẻ mới " + (deckList.size() + 1),
-                    "Mô tả ngắn",
-                    0);
-            deckList.add(newDeck);
-            adapter.notifyItemInserted(deckList.size() - 1);
-        });
-
+        initViews();
+        setupToolbar();
+        setupRecyclerView();
+        loadInitialDeckData();
+        setupListeners();
+        registerActivityLaunchers();
     }
+
+    // --- Initialization ---
+
+    /**
+     * Finds views by their IDs.
+     */
+    private void initViews() {
+        toolbar = findViewById(R.id.toolbar);
+        recyclerViewDecks = findViewById(R.id.recyclerViewDecks);
+        fabAddDeck = findViewById(R.id.fabAddDeck);
+    }
+
+    /**
+     * Sets up the Toolbar as the ActionBar.
+     */
+    private void setupToolbar() {
+        setSupportActionBar(toolbar);
+        // Extra toolbar setup can be added here
+    }
+
+    /**
+     * Configures RecyclerView with its LayoutManager and Adapter.
+     */
+    private void setupRecyclerView() {
+        recyclerViewDecks.setLayoutManager(new LinearLayoutManager(this));
+        deckAdapter = new DeckListAdapter(this, deckList);
+        recyclerViewDecks.setAdapter(deckAdapter);
+    }
+
+    /**
+     * Loads sample deck data.
+     * In a real app, this should come from a repository or ViewModel.
+     */
+    private void loadInitialDeckData() {
+        deckList.add(new Deck(1, "Animals", "Common animal species", 10));
+        deckList.add(new Deck(2, "Colors", "Names of basic colors", 8));
+        deckList.add(new Deck(3, "IT Terms", "Information Technology terms", 12));
+    }
+
+    // --- Listeners ---
+
+    /**
+     * Attaches click listeners for UI components.
+     */
+    private void setupListeners() {
+        fabAddDeck.setOnClickListener(v -> navigateToAddDeckActivity());
+    }
+
+    /**
+     * Launches AddEditDeckActivity in "add" mode.
+     */
+    private void navigateToAddDeckActivity() {
+        Intent intent = new Intent(this, AddEditDeckActivity.class);
+        intent.putExtra("mode", "add");
+        addDeckResultLauncher.launch(intent);
+    }
+
+    // --- Activity Result Handling ---
+
+    /**
+     * Registers ActivityResultLaunchers for starting activities for results.
+     */
+    private void registerActivityLaunchers() {
+        addDeckResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Serializable serializableDeck = result.getData().getSerializableExtra("deck");
+                        if (serializableDeck instanceof Deck) {
+                            addNewDeck((Deck) serializableDeck);
+                        }
+                    }
+                }
+        );
+    }
+
+    /**
+     * Adds a new Deck to the list and updates the adapter.
+     */
+    private void addNewDeck(Deck newDeck) {
+        deckList.add(newDeck);
+        deckAdapter.notifyItemInserted(deckList.size() - 1);
+        Toast.makeText(this, "Deck added: " + newDeck.getName(), Toast.LENGTH_SHORT).show();
+    }
+
+    // --- Menu Handling ---
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,11 +147,17 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
-            Toast.makeText(this, "Mở Settings", Toast.LENGTH_SHORT).show();
-            // TODO: mở SettingsActivity ở bước sau
+            handleSettingsClick();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handles Settings menu click.
+     */
+    private void handleSettingsClick() {
+        Toast.makeText(this, "Open Settings", Toast.LENGTH_SHORT).show();
+        // TODO: Launch SettingsActivity later
+    }
 }

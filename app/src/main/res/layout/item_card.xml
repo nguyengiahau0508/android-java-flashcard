@@ -7,13 +7,23 @@
     android:background="@drawable/bg_item_card"
     android:layout_margin="6dp">
 
+    <ImageView
+        android:id="@+id/ivCardImage"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:background="#DDDDDD"
+        android:contentDescription="Card image" />
+
     <TextView
         android:id="@+id/tvFront"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Front"
         android:textStyle="bold"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"/>
 
     <TextView
         android:id="@+id/tvBack"
