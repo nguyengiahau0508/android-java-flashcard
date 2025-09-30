@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Flash Card</string>
+    <string name="add_deck">Add Deck</string>
 </resources>
