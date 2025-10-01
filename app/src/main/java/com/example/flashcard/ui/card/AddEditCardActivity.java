@@ -92,20 +92,21 @@ public class AddEditCardActivity extends AppCompatActivity {
     }
 
     /** Validate input and return the result card */
+    /** Validate input and return the result card */
     private void saveCard() {
         String front = etFrontText.getText().toString().trim();
         String back = etBackText.getText().toString().trim();
 
-        if (front.isEmpty() || back.isEmpty()) {
-            etFrontText.setError("Required");
-            etBackText.setError("Required");
-            return;
-        }
+        if (!validateInput(front, back)) return;
 
-        Card newCard = new Card(0, 0, front, back, imagePath);
+        // Nếu đang edit thì giữ nguyên id và deckId
+        int id = editingCard != null ? editingCard.getId() : 0;
+        int deckId = editingCard != null ? editingCard.getDeckId() : getIntent().getIntExtra("deck_id", 0);
+
+        Card resultCard = new Card(id, deckId, front, back, imagePath);
 
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("card", newCard);
+        resultIntent.putExtra("card", resultCard);
 
         int position = getIntent().getIntExtra("position", -1);
         resultIntent.putExtra("position", position);
@@ -113,6 +114,7 @@ public class AddEditCardActivity extends AppCompatActivity {
         setResult(RESULT_OK, resultIntent);
         finish();
     }
+
 
     /** Validate user input */
     private boolean validateInput(String front, String back) {

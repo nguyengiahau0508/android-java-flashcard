@@ -80,6 +80,7 @@ public class DeckDetailActivity extends AppCompatActivity {
         fabAddCard.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddEditCardActivity.class);
             intent.putExtra("mode", "add");
+            intent.putExtra("deck_id", getIntent().getIntExtra("deck_id", 0));
             addCardLauncher.launch(intent);
         });
     }
