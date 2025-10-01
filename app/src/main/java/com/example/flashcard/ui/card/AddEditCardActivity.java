@@ -1,6 +1,7 @@
 package com.example.flashcard.ui.card;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
@@ -13,6 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.flashcard.R;
 import com.example.flashcard.data.model.Card;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class AddEditCardActivity extends AppCompatActivity {
 
@@ -54,12 +60,17 @@ public class AddEditCardActivity extends AppCompatActivity {
                 new ActivityResultContracts.GetContent(),
                 uri -> {
                     if (uri != null) {
-                        ivCardImage.setImageURI(uri);
-                        imagePath = uri.toString();
+                        // Copy the selected image to app storage
+                        String localPath = copyUriToInternalStorage(uri);
+                        if (localPath != null) {
+                            imagePath = localPath;
+                            ivCardImage.setImageBitmap(BitmapFactory.decodeFile(localPath));
+                        }
                     }
                 }
         );
     }
+
 
     /** Get intent extras (mode and card data if editing) */
     private void getIntentData() {
@@ -78,9 +89,8 @@ public class AddEditCardActivity extends AppCompatActivity {
         etBackText.setText(editingCard.getBackText());
 
         if (editingCard.getImagePath() != null) {
-            Uri selectedImageUri = Uri.parse(editingCard.getImagePath());
-            ivCardImage.setImageURI(selectedImageUri);
             imagePath = editingCard.getImagePath();
+            ivCardImage.setImageBitmap(BitmapFactory.decodeFile(imagePath));
         }
     }
 
@@ -136,4 +146,22 @@ public class AddEditCardActivity extends AppCompatActivity {
         setResult(RESULT_CANCELED);
         finish();
     }
+
+    private String copyUriToInternalStorage(Uri uri) {
+        try (InputStream inputStream = getContentResolver().openInputStream(uri)) {
+            File file = new File(getFilesDir(), "image_" + System.currentTimeMillis() + ".jpg");
+            try (OutputStream outputStream = new FileOutputStream(file)) {
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, len);
+                }
+            }
+            return file.getAbsolutePath();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
