@@ -48,7 +48,8 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardVi
             holder.ivCardImage.setVisibility(View.VISIBLE);
             holder.ivCardImage.setImageURI(Uri.parse(card.getImagePath()));
         } else {
-            holder.ivCardImage.setVisibility(View.GONE);
+            holder.ivCardImage.setVisibility(View.VISIBLE);
+            holder.ivCardImage.setImageResource(R.drawable.ic_default_card);
         }
 
         holder.itemView.setOnClickListener(v -> {

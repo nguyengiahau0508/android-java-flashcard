@@ -1,6 +1,7 @@
 package com.example.flashcard.ui.deck;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.flashcard.R;
 import com.example.flashcard.data.model.Card;
+import com.example.flashcard.data.model.Deck;
 import com.example.flashcard.ui.card.AddEditCardActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -71,10 +73,14 @@ public class DeckDetailActivity extends AppCompatActivity {
     }
 
     private void loadDummyCards() {
-        cardList.add(new Card(1, 1, "Dog", "Con chó", null));
-        cardList.add(new Card(2, 1, "Cat", "Con mèo", null));
-        cardList.add(new Card(3, 1, "Elephant", "Con voi", null));
+        // Convert default drawable to Uri string
+        String defaultImage = Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.ic_default_card).toString();
+
+        cardList.add(new Card(1, 1, "Dog", "Con chó", defaultImage));
+        cardList.add(new Card(2, 1, "Cat", "Con mèo", defaultImage));
+        cardList.add(new Card(3, 1, "Elephant", "Con voi", defaultImage));
     }
+
 
     private void setupListeners() {
         fabAddCard.setOnClickListener(v -> {
