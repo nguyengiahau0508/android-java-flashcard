@@ -6,4 +6,22 @@
     </style>
 
     <style name="Theme.FlashCard" parent="Base.Theme.FlashCard" />
+
+    <style name="Theme.TDMU" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary branding -->
+        <item name="colorPrimary">@color/tdmu_blue</item>
+        <item name="colorPrimaryVariant">@color/tdmu_blue</item>
+        <item name="colorOnPrimary">@color/tdmu_white</item>
+
+        <!-- Secondary -->
+        <item name="colorSecondary">@color/tdmu_yellow</item>
+        <item name="colorOnSecondary">@color/tdmu_blue</item>
+
+        <!-- Background -->
+        <item name="android:windowBackground">@color/tdmu_gray</item>
+
+        <!-- Font -->
+        <item name="android:fontFamily">@font/merriweather</item>
+    </style>
+
 </resources>

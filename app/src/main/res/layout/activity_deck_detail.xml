@@ -1,31 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/tdmu_gray">
 
+    <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:title="Deck Detail"
-        app:titleTextColor="@android:color/white" />
+        android:background="@color/tdmu_blue"
+        app:title="@string/deck_detail"
+        app:titleTextColor="@color/tdmu_white"
+        android:fontFamily="@font/merriweather"
+        app:navigationIcon="@drawable/ic_arrow_back" />
 
+    <!-- Nội dung danh sách card -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCards"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="8dp" />
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:padding="12dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:scrollbars="vertical"
+        android:background="@color/tdmu_gray" />
 
+    <!-- Nút thêm Card -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        android:layout_margin="20dp"
+        android:contentDescription="@string/add_card"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/tdmu_blue"
+        app:tint="@color/tdmu_white"
+        app:layout_anchor="@id/recyclerViewCards"
+        app:layout_anchorGravity="bottom|end"
+        android:elevation="6dp" />
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -3,8 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:strokeColor="@color/tdmu_blue"
+    app:strokeWidth="1dp"
+    android:backgroundTint="@color/tdmu_white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +29,9 @@
                 android:layout_height="wrap_content"
                 android:text="Deck Name"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/merriweather"
+                android:textColor="@color/tdmu_blue" />
 
             <TextView
                 android:id="@+id/tvDeckCount"
@@ -34,7 +39,8 @@
                 android:layout_height="wrap_content"
                 android:text="10 cards"
                 android:textSize="14sp"
-                android:textColor="@color/gray" />
+                android:fontFamily="@font/merriweather"
+                android:textColor="@color/tdmu_gray" />
 
         </LinearLayout>
 
@@ -46,7 +52,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/edit"
             android:src="@drawable/ic_edit"
-            app:tint="@color/black" />
+            app:tint="@color/tdmu_blue" />
 
         <ImageButton
             android:id="@+id/btnDeleteDeck"
@@ -55,7 +61,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/delete"
             android:src="@drawable/ic_delete"
-            app:tint="@color/black" />
+            app:tint="@color/tdmu_blue" />
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

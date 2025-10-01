@@ -4,8 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:strokeColor="@color/tdmu_blue"
+    app:strokeWidth="1dp"
+    android:backgroundTint="@color/tdmu_white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,15 +24,17 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
+            <!-- Card image -->
             <ImageView
                 android:id="@+id/ivCardImage"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:scaleType="centerCrop"
                 android:visibility="gone"
-                android:background="#DDDDDD"
+                android:background="@color/tdmu_gray"
                 android:contentDescription="@string/card_image" />
 
+            <!-- Front text -->
             <TextView
                 android:id="@+id/tvFront"
                 android:layout_width="wrap_content"
@@ -37,14 +42,19 @@
                 android:text="Front"
                 android:textStyle="bold"
                 android:textSize="18sp"
+                android:fontFamily="@font/merriweather"
+                android:textColor="@color/tdmu_blue"
                 android:layout_marginTop="8dp"/>
 
+            <!-- Back text -->
             <TextView
                 android:id="@+id/tvBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Back"
                 android:textSize="16sp"
+                android:fontFamily="@font/merriweather"
+                android:textColor="@color/black"
                 android:paddingTop="4dp" />
         </LinearLayout>
 
@@ -53,7 +63,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:paddingStart="8dp">
 
             <ImageButton
                 android:id="@+id/btnEditCard"
@@ -62,7 +73,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/edit"
                 android:src="@drawable/ic_edit"
-                app:tint="@color/black" />
+                app:tint="@color/tdmu_blue" />
 
             <ImageButton
                 android:id="@+id/btnDeleteCard"
@@ -71,7 +82,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/delete"
                 android:src="@drawable/ic_delete"
-                app:tint="@color/black" />
+                app:tint="@color/tdmu_blue" />
         </LinearLayout>
 
     </LinearLayout>

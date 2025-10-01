@@ -12,4 +12,7 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="card_image">Card image</string>
+    <string name="deck_detail">Deck Detail</string>
+    <string name="add_card">Add Card</string>
+    <string name="card_image_preview">Card image preview</string>
 </resources>
