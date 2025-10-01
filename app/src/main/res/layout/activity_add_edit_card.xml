@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/front_text"
-            app:boxBackgroundMode="outlined"
+            app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/tdmu_blue"
             app:hintTextColor="@color/tdmu_blue"
             android:layout_marginBottom="12dp">
@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/back_text"
-            app:boxBackgroundMode="outlined"
+            app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/tdmu_blue"
             app:hintTextColor="@color/tdmu_blue"
             android:layout_marginBottom="20dp">
